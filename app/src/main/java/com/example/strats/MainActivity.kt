@@ -48,10 +48,7 @@ fun STRATSEventDisplay(bowlingEvents: MutableList<BowlingEvent>, modifier: Modif
 @Composable
 fun BowlingEventCard(bowlingEvent: BowlingEvent, modifier: Modifier = Modifier) {
     Column (modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)){
-        Row(
-            Text()
-            
-        )
+        
     }
 }
 
