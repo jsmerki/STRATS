@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">STRATS</string>
+    <string name="homepage_title">My Events</string>
+    <string name="event_page_title">View Event</string>
+    <string name="practice_page_title">Practice</string>
+    <string name="statistics_page_title">My Statistics</string>
+    <string name="games_suffix">&#032;games</string>
 </resources>
