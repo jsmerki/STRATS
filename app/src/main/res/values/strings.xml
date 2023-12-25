@@ -4,5 +4,8 @@
     <string name="event_page_title">View Event</string>
     <string name="practice_page_title">Practice</string>
     <string name="statistics_page_title">My Statistics</string>
-    <string name="games_suffix">&#032;games</string>
+    <string name="event_category_league">League</string>
+    <string name="event_category_tournament">Tournament</string>
+    <string name="event_category_practice">Practice</string>
+    <string name="games_suffix">games</string>
 </resources>
