@@ -4,7 +4,7 @@ import kotlin.math.max
 
 class Game () {
 
-    public val frames: MutableList<Frame> = mutableListOf()
+    val frames: MutableList<Frame> = mutableListOf()
 
     fun getGameScore(): Int {
         return frames[frames.lastIndex].frameScore
@@ -19,7 +19,7 @@ class Game () {
 
     fun calculateScore() {
         //We only need to go as far back as two frames
-        for(i in max(frames.size - 2, 0) until frames.size) {
+        for(i in max(frames.lastIndex - 2, 0) .. frames.lastIndex) {
             frames[i].frameScore = getPreviousFrameScore(i) + frames[i].firstThrow +
                     frames[i].secondThrow + frames[i].thirdThrow
             if(frames[i].firstThrow == 10) frames[i].frameScore += getNextTwoThrows(i)
@@ -28,7 +28,7 @@ class Game () {
     }
 
     fun getPreviousFrameScore(index: Int): Int {
-        return if(frames.size == 1) 0 else frames[index - 1].frameScore
+        return if(index == 0) 0 else frames[index - 1].frameScore
     }
 
     //A function most likely used to get the value that needs to be added to a spare frame
