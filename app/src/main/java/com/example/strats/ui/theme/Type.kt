@@ -34,6 +34,13 @@ val Typography = Typography(
     titleLarge = TextStyle(
         fontFamily = Anton,
         fontWeight = FontWeight.Normal,
+        fontSize = 28.sp,
+        lineHeight = 40.sp,
+        letterSpacing = 0.5.sp
+    ),
+    titleSmall = TextStyle(
+        fontFamily = Anton,
+        fontWeight = FontWeight.Normal,
         fontSize = 20.sp,
         lineHeight = 28.sp,
         letterSpacing = 0.5.sp
