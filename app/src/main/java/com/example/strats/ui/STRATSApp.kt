@@ -73,8 +73,10 @@ fun STRATSApp(
                     onNewEventEndDateChanged = { eventsHomepageViewModel.updateNewEventEndDate(it) },
                     onNewEventCategoryChanged = { eventsHomepageViewModel.updateNewEventCategory(it) },
                     onCreateEventClicked = {
+                        //Try to add the event but only navigate if no errors exist in the form
+                        //Must call addEvent first since check for errors occurs inside it
                         eventsHomepageViewModel.addEvent()
-                        navController.navigate(Destinations.Homepage.name)
+                        if(!eventsHomepageViewModel.errorsExist()) navController.navigate(Destinations.Homepage.name)
                     },
                     formUiState = eventsUiState
                 )

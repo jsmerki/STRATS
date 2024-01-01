@@ -8,5 +8,5 @@ data class EventsUiState(
    val newEventLocationError: Boolean = false,
    val newEventStartDateError: Boolean = false,
    val newEventEndDateError: Boolean = false,
-   val newEventCategoryError: Boolean = false,
+   val newEventCategoryError: Boolean = false
 )

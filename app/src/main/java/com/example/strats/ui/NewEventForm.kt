@@ -1,21 +1,26 @@
 package com.example.strats.ui
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Button
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerFormatter
+import androidx.compose.material3.DisplayMode
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -25,6 +30,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.strats.R
@@ -33,18 +41,19 @@ import com.example.strats.model.EventCategory
 import com.example.strats.model.EventsHomepageViewModel
 import com.example.strats.ui.theme.STRATSTheme
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewEventForm(
     newEventTitle: String,
     newEventLocation: String,
     newEventCategory: EventCategory,
-    newEventStartDate: String,
-    newEventEndDate: String,
+    newEventStartDate: TextFieldValue,
+    newEventEndDate: TextFieldValue,
     onNewEventTitleChanged: (String) -> Unit,
     onNewEventLocationChanged: (String) -> Unit,
     onNewEventCategoryChanged: (EventCategory) -> Unit,
-    onNewEventStartDateChanged: (String) -> Unit,
-    onNewEventEndDateChanged: (String) -> Unit,
+    onNewEventStartDateChanged: (TextFieldValue) -> Unit,
+    onNewEventEndDateChanged: (TextFieldValue) -> Unit,
     onCreateEventClicked: () -> Unit,
     formUiState: EventsUiState,
     modifier: Modifier = Modifier
@@ -65,6 +74,10 @@ fun NewEventForm(
                 onValueChange = onNewEventTitleChanged,
                 label = { Text(text = stringResource(R.string.input_prompt_event_title)) },
                 singleLine = true,
+                isError = formUiState.newEventTitleError,
+                supportingText = {
+                    if(formUiState.newEventTitleError) Text(stringResource(id = R.string.input_error_event_title))
+                },
                 modifier = Modifier.fillMaxWidth()
             )
         }
@@ -74,9 +87,15 @@ fun NewEventForm(
                 onValueChange = onNewEventLocationChanged,
                 label = { Text(text = stringResource(R.string.input_prompt_event_location)) },
                 singleLine = true,
+                isError = formUiState.newEventLocationError,
+                supportingText = {
+                    if(formUiState.newEventLocationError) Text(stringResource(id = R.string.input_error_event_location))
+                },
                 modifier = Modifier.fillMaxWidth()
             )
         }
+        //NOTE: the following two text fields in this row use TextFieldValue since they need slashes ("/")
+        //injected to maintain the date format and also keep the cursor in the right position
         Row {
             OutlinedTextField(
                 value = newEventStartDate,
@@ -84,6 +103,13 @@ fun NewEventForm(
                 label = { Text(text = stringResource(R.string.input_prompt_start_date)) },
                 placeholder = { Text(text = "mm/dd/yyyy" )},
                 singleLine = true,
+                isError = formUiState.newEventStartDateError,
+                supportingText = {
+                    if(formUiState.newEventStartDateError) Text(stringResource(id = R.string.input_error_date))
+                },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number
+                ),
                 modifier = Modifier
                     .weight(0.5F)
                     .padding(end = dimensionResource(id = R.dimen.padding_xsmall))
@@ -94,6 +120,13 @@ fun NewEventForm(
                 label = { Text(text = stringResource(R.string.input_prompt_end_date)) },
                 placeholder = { Text(text = "mm/dd/yyyy" )},
                 singleLine = true,
+                isError = formUiState.newEventEndDateError,
+                supportingText = {
+                    if(formUiState.newEventEndDateError) Text(stringResource(id = R.string.input_error_date))
+                },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number
+                ),
                 modifier = Modifier
                     .weight(0.5F)
                     .padding(start = dimensionResource(id = R.dimen.padding_xsmall))
@@ -105,6 +138,7 @@ fun NewEventForm(
                 onValueChange = {},
                 label = { Text(stringResource(R.string.input_prompt_event_category)) },
                 readOnly = true,
+                isError = formUiState.newEventCategoryError,
                 trailingIcon = { 
                     IconButton(onClick = {
                         expanded = true
