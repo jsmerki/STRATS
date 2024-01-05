@@ -2,10 +2,12 @@ package com.example.strats.model
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
+import com.example.strats.data.Datasource
 import com.example.strats.data.EventsUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -79,6 +81,21 @@ class EventsHomepageViewModel: ViewModel() {
         return _uiState.value.newEventTitleError || _uiState.value.newEventLocationError ||
                 _uiState.value.newEventCategoryError || _uiState.value.newEventStartDateError ||
                 _uiState.value.newEventEndDateError
+    }
+
+    fun changeEventCategoryFilter(categoryToFilter: EventCategory) {
+        /*_uiState.update { currentState ->
+            currentState.copy(
+                filteredEventsList = currentState.eventsList.filter{event ->
+                    event.category == categoryToFilter
+                }
+            )
+        }*/
+        _uiState.update { currentState ->
+            currentState.copy(
+                eventsCategoryFilter = categoryToFilter
+            )
+        }
     }
 
     fun updateNewEventTitle(title: String) {

@@ -1,5 +1,11 @@
 <resources>
     <string name="app_name">S.T.R.A.T.S.</string>
+    <string name="content_menu_icon">App Menu</string>
+    <string name="content_search_icon">Search</string>
+    <string name="content_more_icon">More Actions</string>
+    <string name="tab_title_leagues">Leagues</string>
+    <string name="tab_title_tournaments">Tournaments</string>
+    <string name="tab_title_practices">Practices</string>
     <string name="homepage_title">My Events</string>
     <string name="new_event_form_title">Create New Event</string>
     <string name="event_page_title">View Event</string>
@@ -19,4 +25,5 @@
     <string name="input_error_event_location">Enter a location</string>
     <string name="input_error_date">Pleas enter a valid date</string>
     <string name="input_error_event_category">Select a category</string>
+    <string name="toast_coming_soon">Coming Soon!</string>
 </resources>

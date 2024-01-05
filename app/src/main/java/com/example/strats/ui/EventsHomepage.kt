@@ -32,7 +32,7 @@ import com.example.strats.model.EventCategory
 
 @Composable
 fun EventsHomepage(
-    bowlingEvents: MutableList<BowlingEvent>,
+    bowlingEvents: List<BowlingEvent>,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(modifier = Modifier.padding(dimensionResource(R.dimen.padding_xxlarge))) {
