@@ -31,7 +31,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-
+//TODO: Create Lifecycle Methods!!!
 
 @Preview(showBackground = true)
 @Composable
