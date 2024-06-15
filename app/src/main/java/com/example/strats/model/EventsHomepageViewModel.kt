@@ -18,6 +18,9 @@ class EventsHomepageViewModel: ViewModel() {
 
     private val _uiState = MutableStateFlow(EventsUiState())
     val uiState: StateFlow<EventsUiState> = _uiState.asStateFlow()
+    //Buffers to keep track of previous input value, in case users backspace
+    private var newEventStartDateBuffer: String = ""
+    private var newEventEndDateBuffer: String = ""
 
     //Variables to hold changes in New Event form text fields
     var newEventTitle: String by mutableStateOf("")
@@ -61,7 +64,7 @@ class EventsHomepageViewModel: ViewModel() {
         //TODO: Work on category field??
         if(inputIsEmpty(newEventTitle)) errors[0] = true
         if(inputIsEmpty(newEventLocation)) errors[1] = true
-        //if check for category
+        //TODO: if check for category
         if(!dateRegex.matches(newEventStartDate.text)) errors[3] = true
         if(!dateRegex.matches(newEventEndDate.text)) errors[4] = true
 
@@ -107,32 +110,13 @@ class EventsHomepageViewModel: ViewModel() {
     }
 
     fun updateNewEventStartDate(startDate: TextFieldValue) {
-        //This needs to use technically incorrect RegEx templates, otherwise slashes won't get added
-        //for users when they attempt to enter incorrect dates
-        //TODO: consider consolidating new date functions by moving regex checks to one function
-        val months = """[0-9]{2}""".toRegex()
-        val monthsAndDays = """[0-9]{2}/[0-9]{2}""".toRegex()
-
-        newEventStartDate = if(months.matches(startDate.text) || monthsAndDays.matches(startDate.text)) {
-            val newText = startDate.text + "/"
-            startDate.copy(
-                text = newText,
-                selection = TextRange(newText.length)
-            )
-        } else startDate
+        newEventStartDate = dateFieldUpdate(startDate, newEventStartDateBuffer)
+        newEventStartDateBuffer = newEventStartDate.text
     }
 
     fun updateNewEventEndDate(endDate: TextFieldValue) {
-        val months = """[0-9]{2}""".toRegex()
-        val monthsAndDays = """[0-9]{2}/[0-9]{2}""".toRegex()
-
-        newEventEndDate = if(months.matches(endDate.text) || monthsAndDays.matches(endDate.text)) {
-            val newText = endDate.text + "/"
-            endDate.copy(
-                text = newText,
-                selection = TextRange(newText.length)
-            )
-        } else endDate
+        newEventEndDate = dateFieldUpdate(endDate, newEventEndDateBuffer)
+        newEventEndDateBuffer = newEventEndDate.text
     }
 
     fun updateNewEventCategory(category: EventCategory) {
@@ -142,6 +126,30 @@ class EventsHomepageViewModel: ViewModel() {
     private fun inputIsEmpty(value: String): Boolean {
         return value == ""
     }
+    private fun dateFieldUpdate(date: TextFieldValue, dateBuffer: String): TextFieldValue {
+        //This needs to use technically incorrect RegEx templates, otherwise slashes won't get added
+        //for users when they attempt to enter incorrect dates
+        //The check if the entered date was valid will happen elsewhere
+        val months = """[0-9]{2}""".toRegex()
+        val monthsAndDays = """[0-9]{2}/[0-9]{2}""".toRegex()
+
+        //If the buffer is longer than the new value (a backspace was entered) and the last character
+        //in the buffer was a backspace, return before the code that can re-add the backspace will run
+        if((dateBuffer.length > date.text.length) && (dateBuffer[dateBuffer.length - 1] == '/'))
+            return date
+
+        //If the entered date has months or months and days entered, automatically add a slash
+        val newDate: TextFieldValue = if(months.matches(date.text) || monthsAndDays.matches(date.text)) {
+            val newText = date.text + "/"
+            date.copy(
+                text = newText,
+                selection = TextRange(newText.length)
+            )
+        } else date
+
+        return newDate
+    }
+
     private fun reset() {
         //Reset form text field values
         newEventTitle = ""

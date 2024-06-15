@@ -1,5 +1,6 @@
 package com.example.strats.ui
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -55,10 +56,14 @@ fun NewEventForm(
     onNewEventStartDateChanged: (TextFieldValue) -> Unit,
     onNewEventEndDateChanged: (TextFieldValue) -> Unit,
     onCreateEventClicked: () -> Unit,
+    onSystemBackPressed: () -> Unit,
     formUiState: EventsUiState,
     modifier: Modifier = Modifier
 ) {
     var expanded by remember { mutableStateOf(false) }
+
+    //When the user presses the system back button we need to handle it by restoring the FAB and tabs
+    BackHandler(enabled = true, onBack = onSystemBackPressed)
 
     Column(modifier = modifier.padding(dimensionResource(R.dimen.padding_large))) {
         Row(modifier = Modifier.padding(dimensionResource(R.dimen.padding_small))) {
@@ -230,6 +235,7 @@ fun NewEventFormPreview() {
             onNewEventEndDateChanged = { viewModel.updateNewEventEndDate(it) },
             onNewEventStartDateChanged = { viewModel.updateNewEventStartDate(it) },
             onCreateEventClicked = {},
+            onSystemBackPressed = {},
             formUiState = viewModel.uiState.collectAsState().value
         )
     }

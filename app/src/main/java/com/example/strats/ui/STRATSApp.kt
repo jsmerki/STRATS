@@ -15,9 +15,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SecondaryTabRow
 import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -25,6 +23,7 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -59,7 +58,7 @@ fun STRATSAppBar(changeEventCategoryFilter: (EventCategory) -> Unit, showTabs: B
     val comingSoonToast = {Toast.makeText(context, comingSoonText, Toast.LENGTH_SHORT).show()}
 
     //State variable to keep track of selected tabs, as well as tab titles and categories for each tab
-    var selectedTab by remember{ mutableStateOf(0) }
+    var selectedTab by remember{ mutableIntStateOf(0) }
     val tabTitles = listOf(stringResource(R.string.tab_title_leagues), stringResource(R.string.tab_title_tournaments), stringResource(R.string.tab_title_practices))
     val tabCategories = listOf(EventCategory.LEAGUE, EventCategory.TOURNAMENT, EventCategory.PRACTICE)
 
@@ -123,7 +122,7 @@ fun STRATSApp(
     modifier: Modifier = Modifier
 ) {
 
-    var showNewEventsFAB: Boolean by remember{ mutableStateOf(true) }
+    var showNewEventsFAB: Boolean by remember{ mutableStateOf(true)}
     var showCategoryTabs: Boolean by remember{ mutableStateOf(true)}
 
     Scaffold(
@@ -182,6 +181,11 @@ fun STRATSApp(
                             showNewEventsFAB = true
                             showCategoryTabs = true
                         }
+                    },
+                    onSystemBackPressed = {
+                        navController.navigate(Destinations.Homepage.name)
+                        showNewEventsFAB = true
+                        showCategoryTabs = true
                     },
                     formUiState = eventsUiState
                 )
